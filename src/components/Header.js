@@ -38,13 +38,13 @@ const Header = () => {
     return () => unsubscribe();
   }, []);
   return (
-    <div className="w-full h-20 bg-gradient-to-r from-black/50  absolute flex justify-between items-center px-20">
+    <div className="w-full h-20 bg-gradient-to-r from-black/50   flex justify-between items-center z-20 fixed px-20">
       <img className="w-44 h-20 " src={NETFLIX_LOGO} alt="logo" />
       {user && (
-        <div className=" w-40 flex justify-between items-center">
+        <div className=" w-44 flex justify-between items-center">
           <div className="flex flex-col  items-center mt-4">
             <img
-              className="w-12 h-12 rounded-lg"
+              className="w-12 h-12 rounded-full"
               src={user.photoURL}
               alt="user-img"
             />

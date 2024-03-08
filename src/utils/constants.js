@@ -4,5 +4,16 @@ export const NETFLIX_BG_IMG =
 export const NETFLIX_LOGO =
   "https://cdn.cookielaw.org/logos/dd6b162f-1a32-456a-9cfe-897231c7763c/4345ea78-053c-46d2-b11e-09adaef973dc/Netflix_Logo_PMS.png";
 
-  export const MY_PROFILE =
+export const MY_PROFILE =
   "https://avatars.githubusercontent.com/u/147639866?v=4";
+
+export const API_OPTIONS = {
+  method: "GET",
+  headers: {
+    accept: "application/json",
+    Authorization:
+      "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZmYxMjhkYWIxYmRhNjc5NGFjYmEyNWEzY2FmNWYzMyIsInN1YiI6IjY1ZTdlZGI3YzE1Zjg5MDE4NjE2NzYyNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.in-pb7PCr6Pud-jbjHmFRH92pM0apTKgwuROrmyHWT4",
+  },
+};
+
+export const NOW_PLAYING_API="https://api.themoviedb.org/3/movie/now_playing?page=1"
