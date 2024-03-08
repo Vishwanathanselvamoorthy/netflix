@@ -1,14 +1,15 @@
 import React, { useRef, useState } from "react";
-import { NETFLIX_BG_IMG } from "../utils/constants";
+import { MY_PROFILE, NETFLIX_BG_IMG } from "../utils/constants";
 import Header from "./Header";
 import { validate } from "../utils/validate";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  updateProfile,
 } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../utils/userSlice";
 
 const Login = () => {
@@ -17,7 +18,7 @@ const Login = () => {
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
 
-  const navigate = useNavigate();
+  const userDetails = useSelector((state) => state.user);
 
   const signInFormFunc = () => {
     setIsSignInForm(!isSignInForm);
@@ -37,23 +38,35 @@ const Login = () => {
         .then((userCredential) => {
           // Signed up
           const user = userCredential.user;
-          const { uid, email } = auth.currentUser;
-          dispatch(
-            addUser({
-              uid: uid,
-              email: email,
+          updateProfile(user, {
+            displayName: name.current.value,
+            photoURL: MY_PROFILE,
+          })
+            .then(() => {
+              const { uid, email, displayName, photoURL } = auth.currentUser;
+              dispatch(
+                addUser({
+                  uid: uid,
+                  email: email,
+                  displayName: displayName,
+                  photoURL: photoURL,
+                })
+              );
             })
-          );
+            .catch((error) => {
+              // An error occurred
+              // ...
+            });
 
           setSuccessMsg("Sign Up Successfully");
-          navigate("/browse");
+
           // ...
         })
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
           setErrorMsg(errorMessage);
-          navigate("/");
+
           // ..
         });
     } else {
@@ -65,15 +78,35 @@ const Login = () => {
         .then((userCredential) => {
           // Signed in
           const user = userCredential.user;
+          updateProfile(user, {
+            displayName: userDetails.displayName,
+            photoURL: MY_PROFILE,
+          })
+            .then(() => {
+              const { uid, email, photoURL, displayName } = auth.currentUser;
+              dispatch(
+                addUser({
+                  uid: uid,
+                  email: email,
+                  displayName: displayName,
+
+                  photoURL: photoURL,
+                })
+              );
+            })
+            .catch((error) => {
+              // An error occurred
+              // ...
+            });
+
           setSuccessMsg("Sign In Successfully");
-          navigate("/browse");
+
           // ...
         })
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
           setErrorMsg("User Not Available");
-          navigate("/");
         });
     }
   };
