@@ -1,10 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { NETFLIX_LOGO } from "../utils/constants";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser, removeUser } from "../utils/userSlice";
 import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMagnifyingGlass, faBell } from "@fortawesome/free-solid-svg-icons";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -38,22 +40,40 @@ const Header = () => {
     return () => unsubscribe();
   }, []);
   return (
-    <div className="w-full h-20 bg-gradient-to-r from-black/50   flex justify-between items-center z-20 fixed px-20">
-      <img className="w-44 h-20 " src={NETFLIX_LOGO} alt="logo" />
+    <div className="w-full bg-gradient-to-r from-black/100 bg-opacity-50   flex justify-between items-center z-20 fixed px-8">
+      <div className="flex items-center gap-10 font-semibold">
+        <img className="w-32 " src={NETFLIX_LOGO} alt="logo" />
+        <ul className="flex text-white gap-6">
+          <li>Home</li>
+          <li>TV Shows</li>
+          <li>Movies</li>
+          <li>New & Popular</li>
+          <li>My List</li>
+          <li>Browse By Language</li>
+        </ul>
+      </div>
+
       {user && (
-        <div className=" w-44 flex justify-between items-center">
-          <div className="flex flex-col  items-center mt-4">
-            <img
-              className="w-12 h-12 rounded-full"
-              src={user.photoURL}
-              alt="user-img"
-            />
-            <p className="font-semibold">{user.displayName}</p>
-          </div>
+        <div className=" w-96 flex justify-between items-center">
+          <FontAwesomeIcon
+            className="text-white text-xl"
+            icon={faMagnifyingGlass}
+          />
+
+          <p className="font-semibold text-lg text-white">{user.displayName}</p>
+          <FontAwesomeIcon className="text-white text-xl" icon={faBell} />
+
+          <img
+            className="w-10 h-10 rounded-xl"
+            src={user.photoURL}
+            alt="user-img"
+            style={{ position: "relative" }} // Ensure the image remains fixed in its position
+          />
 
           <button
             className="bg-red-700 p-1 rounded-lg text-white font-semibold"
             onClick={signOutFunc}
+            // style={{ visibility: signOutBtn ? 'visible' : 'hidden' }}
           >
             Sign Out
           </button>

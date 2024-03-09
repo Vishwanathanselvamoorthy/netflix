@@ -4,6 +4,7 @@ import {
   NOW_PLAYING_API,
   API_OPTIONS,
   POPULAR_MOVIES,
+  POPULAR_MOVIES_API,
 } from "../utils/constants";
 import { addPopularMovies } from "../utils/movieSlice";
 
@@ -14,7 +15,7 @@ const usePopularMovies = () => {
   }, []);
 
   const getPopularMoviesApi = async () => {
-    const data = await fetch(POPULAR_MOVIES, API_OPTIONS);
+    const data = await fetch(POPULAR_MOVIES_API, API_OPTIONS);
 
     const json = await data.json();
 

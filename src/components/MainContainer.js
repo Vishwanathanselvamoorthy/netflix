@@ -8,7 +8,7 @@ const MainContainer = () => {
     (state) => state.movies?.nowPlayingMovies
   );
   if (nowPlayingMovies === null) return;
-  const movieDetails = nowPlayingMovies[0];
+  const movieDetails = nowPlayingMovies[6];
 
   const { overview, original_title, id } = movieDetails;
   return (
