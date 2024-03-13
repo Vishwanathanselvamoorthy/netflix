@@ -1,8 +1,7 @@
 import React from "react";
 import MovieCard from "./MovieCard";
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css'; // Import Swiper styles
-
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css"; // Import Swiper styles
 
 const MovieList = ({ title, movies }) => {
   return (
@@ -14,11 +13,12 @@ const MovieList = ({ title, movies }) => {
           slidesPerView={6}
           // Example loop property
         >
-          {movies && movies.map((movie) => (
-            <SwiperSlide key={movie.id}>
-              <MovieCard posterPath={movie.poster_path} />
-            </SwiperSlide>
-          ))}
+          {movies &&
+            movies.map((movie) => (
+              <SwiperSlide key={movie.id}>
+                <MovieCard posterPath={movie.poster_path} />
+              </SwiperSlide>
+            ))}
         </Swiper>
       </div>
     </div>
@@ -26,5 +26,3 @@ const MovieList = ({ title, movies }) => {
 };
 
 export default MovieList;
-
-

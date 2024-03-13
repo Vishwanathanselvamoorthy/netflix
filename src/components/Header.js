@@ -1,18 +1,31 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { NETFLIX_LOGO } from "../utils/constants";
+import { NETFLIX_LOGO, supportedLanguages } from "../utils/constants";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser, removeUser } from "../utils/userSlice";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMagnifyingGlass, faBell } from "@fortawesome/free-solid-svg-icons";
+import {
+  faMagnifyingGlass,
+  faBell,
+  faHome,
+} from "@fortawesome/free-solid-svg-icons";
+import { toggleGptSearchView } from "../utils/gptSlice";
+import language from "../utils/languageConstants";
+import { changeLanguage } from "../utils/configSlice";
+import { icon } from "@fortawesome/fontawesome-svg-core";
 
 const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const user = useSelector((state) => state.user);
+  const showGptSearch = useSelector((state) => state.gpt.showGptSearch);
+
+  const handleGptSearchClick = () => {
+    dispatch(toggleGptSearchView());
+  };
 
   const signOutFunc = () => {
     signOut(auth)
@@ -39,6 +52,9 @@ const Header = () => {
     });
     return () => unsubscribe();
   }, []);
+  const handleLanguageChange = (e) => {
+    dispatch(changeLanguage(e.target.value));
+  };
   return (
     <div className="w-full bg-gradient-to-r from-black/100 bg-opacity-50   flex justify-between items-center z-20 fixed px-8">
       <div className="flex items-center gap-10 font-semibold">
@@ -54,29 +70,55 @@ const Header = () => {
       </div>
 
       {user && (
-        <div className=" w-96 flex justify-between items-center">
-          <FontAwesomeIcon
-            className="text-white text-xl"
-            icon={faMagnifyingGlass}
-          />
+        <div>
+          {showGptSearch && (
+            <select
+              className="p-2 bg-gray-600 text-white"
+              onChange={handleLanguageChange}
+            >
+              {supportedLanguages.map((lang) => (
+                <option key={lang.identifier} value={lang.identifier}>
+                  {lang.name}
+                </option>
+              ))}
+            </select>
+          )}
 
-          <p className="font-semibold text-lg text-white">{user.displayName}</p>
-          <FontAwesomeIcon className="text-white text-xl" icon={faBell} />
+          <div className=" w-96 flex justify-between items-center">
+            {showGptSearch ? (
+              <FontAwesomeIcon
+                className="text-white text-xl"
+                icon={faHome}
+                onClick={handleGptSearchClick}
+              />
+            ) : (
+              <FontAwesomeIcon
+                className="text-white text-xl"
+                icon={faMagnifyingGlass}
+                onClick={handleGptSearchClick}
+              />
+            )}
 
-          <img
-            className="w-10 h-10 rounded-xl"
-            src={user.photoURL}
-            alt="user-img"
-            style={{ position: "relative" }} // Ensure the image remains fixed in its position
-          />
+            <p className="font-semibold text-lg text-white">
+              {user.displayName}
+            </p>
+            <FontAwesomeIcon className="text-white text-xl" icon={faBell} />
 
-          <button
-            className="bg-red-700 p-1 rounded-lg text-white font-semibold"
-            onClick={signOutFunc}
-            // style={{ visibility: signOutBtn ? 'visible' : 'hidden' }}
-          >
-            Sign Out
-          </button>
+            <img
+              className="w-10 h-10 rounded-xl"
+              src={user.photoURL}
+              alt="user-img"
+              style={{ position: "relative" }} // Ensure the image remains fixed in its position
+            />
+
+            <button
+              className="bg-red-700 p-1 rounded-lg text-white font-semibold"
+              onClick={signOutFunc}
+              // style={{ visibility: signOutBtn ? 'visible' : 'hidden' }}
+            >
+              Sign Out
+            </button>
+          </div>
         </div>
       )}
     </div>
